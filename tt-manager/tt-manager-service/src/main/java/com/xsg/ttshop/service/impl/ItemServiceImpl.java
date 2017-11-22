@@ -1,5 +1,6 @@
 package com.xsg.ttshop.service.impl;
 
+import com.xsg.ttshop.common.dto.Order;
 import com.xsg.ttshop.common.dto.Page;
 import com.xsg.ttshop.common.dto.Result;
 import com.xsg.ttshop.dao.TbItemCustomMapper;
@@ -49,13 +50,13 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Result<TbItemCustom> listItems(Page page) {
+    public Result<TbItemCustom> listItems(Page page, Order order) {
         Result<TbItemCustom> result = null;
         try {
             //1 先查总记录数 int--Long
             long total = itemCustomDao.countItems();
             //2 查询指定页码的记录集合
-            List<TbItemCustom> list = itemCustomDao.listItems(page);
+            List<TbItemCustom> list = itemCustomDao.listItems(page,order);
             //3 存放result中
             result = new Result<TbItemCustom>();
             result.setTotal(total);
@@ -68,11 +69,11 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public int itemsBatch(List<Long> ids) {
+    public int itemsBatch(List<Long> ids,byte code) {
         int i = 0;
         try {
             TbItem record = new TbItem();
-            record.setStatus((byte) 3);
+            record.setStatus(code);
             //创建模板
             TbItemExample example = new TbItemExample();
             TbItemExample.Criteria criteria = example.createCriteria();

@@ -7,12 +7,25 @@
       i.status, i.created, i.updated,c.name as catName
   </sql>
   <select id="countItems" resultType="_long">
-    select count(1) from tb_item
+    select count(1) from tb_item i
+    WHERE i.status!=3
   </select>
-  <select id="listItems" parameterType="com.xsg.ttshop.common.dto.Page" resultType="com.xsg.ttshop.pojo.vo.TbItemCustom">
+  <select id="listItems"  resultType="com.xsg.ttshop.pojo.vo.TbItemCustom">
     select
     <include refid="Base_Column_List" />
-    from tb_item i left join tb_item_cat c on i.cid=c.id
-    limit #{offset},#{rows}
+    from tb_item i
+    left join tb_item_cat c on i.cid=c.id
+    WHERE i.status!=3
+    <choose>
+      <when test="order!=null and order.sort!=null and order.order!=null">
+        <foreach collection="order.orderParams" item="item" open="order by" close="" separator=",">
+          i.${item}
+        </foreach>
+      </when>
+      <otherwise>
+        ORDER BY i.id DESC
+      </otherwise>
+    </choose>
+    limit #{page.offset},#{page.rows}
   </select>
 </mapper>

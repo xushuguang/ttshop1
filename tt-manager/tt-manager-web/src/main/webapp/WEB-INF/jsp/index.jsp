@@ -51,6 +51,7 @@
 <script src="js/jquery-easyui-1.5/jquery.easyui.min.js"></script>
 <script src="js/jquery-easyui-1.5/locale/easyui-lang-zh_CN.js"></script>
 <script src="js/moment/moment-with-locales.js"></script>
+<script src="js/accounting.js"></script>
 <script>
     moment.locale();
 </script>

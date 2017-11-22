@@ -1,5 +1,6 @@
 package com.xsg.ttshop.web;
 
+import com.xsg.ttshop.common.dto.Order;
 import com.xsg.ttshop.common.dto.Page;
 import com.xsg.ttshop.common.dto.Result;
 import com.xsg.ttshop.pojo.po.TbItem;
@@ -48,10 +49,10 @@ public class ItemAction {
 //    }
     @ResponseBody
     @RequestMapping(value = "/items", method = RequestMethod.GET)
-    public Result<TbItemCustom> listItems(Page page) {
+    public Result<TbItemCustom> listItems(Page page, Order order) {
         Result<TbItemCustom> result = null;
         try {
-            result = itemService.listItems(page);
+            result = itemService.listItems(page,order);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             e.printStackTrace();
@@ -60,11 +61,11 @@ public class ItemAction {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/items/batch", method = RequestMethod.POST)
-    public int itemsBatch(@RequestParam("ids[]") List<Long> ids) {
+    @RequestMapping(value = "/items/batch/{code}", method = RequestMethod.POST)
+    public int itemsBatch(@PathVariable("code") byte code,@RequestParam("ids[]") List<Long> ids) {
         int i = 0;
         try {
-            i = itemService.itemsBatch(ids);
+            i = itemService.itemsBatch(ids,code);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             e.printStackTrace();

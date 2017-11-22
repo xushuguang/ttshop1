@@ -36,7 +36,7 @@
                     //$.ajax() $.post() $.get()
                     $.post(
                         //url，提交给后台谁去处理
-                        'items/batch',
+                        'items/batch/3',
                         //data，提交什么到后台，ids
                         {'ids[]':ids},
                         //callback,相当于$.ajax中success
@@ -46,7 +46,8 @@
 //                            //object转换string
 //                            var objString = JSON.stringify(obj);
 //                            console.log(typeof objString);
-                            alert(obj.id);
+//                            alert(obj.id);
+//                            debugger;
                             if(data > 0){
                                 $('#dgItems').datagrid('reload');
                             }
@@ -66,17 +67,76 @@
         iconCls: 'icon-up',
         text: '上架',
         handler: function () {
-            console.log('up');
+//            debugger;
+           //取到客户选中的记录集合
+            var rows = $('#dgItems').datagrid('getSelections');
+            if(rows.length == 0){
+                $.messager.alert('警告','请选中至少一条记录!','warning');
+                return;
+            }
+            $.messager.confirm('确认','您确定要上架么？',function (r) {
+                if (r){
+                    //定义一个空的数组用来存放id的集合
+                    var ids = [];
+                    //遍历的是客户选中的记录集合
+                    for (var i = 0; i<rows.length; i++){
+                        ids.push(rows[i].id);
+                    }
+                    //发出ajax请求
+                    $.post(
+                        //url,提交给后台谁去处理
+                        'items/batch/1',
+                        //data,提交什么到后台，ids
+                        {'ids[]':ids},
+                        //callback,相当于$.ajax中的success
+                        function (data) {
+                            if (data > 0){
+                                $('#dgItems').datagrid('reload');
+                            }
+                        }
+                    );
+                }
+            });
         }
     }, {
         iconCls: 'icon-down',
         text: '下架',
         handler: function () {
-            console.log('down');
+            //取到客户选中的记录集合
+            var rows = $('#dgItems').datagrid('getSelections');
+            if(rows.length == 0){
+                $.messager.alert('警告','请选中至少一条记录!','warning');
+                return;
+            }
+            $.messager.confirm('确认','您确定要下架么？',function (r) {
+                if (r){
+                    //定义一个空的数组用来存放id的集合
+                    var ids = [];
+                    //遍历的是客户选中的记录集合
+                    for (var i = 0; i<rows.length; i++){
+                        ids.push(rows[i].id);
+                    }
+                    //发出ajax请求
+                    $.post(
+                        //url,提交给后台谁去处理
+                        'items/batch/2',
+                        //data,提交什么到后台，ids
+                        {'ids[]':ids},
+                        //callback,相当于$.ajax中的success
+                        function (data) {
+                            if (data > 0){
+                                $('#dgItems').datagrid('reload');
+                            }
+                        }
+                    );
+                }
+            });
         }
     }];
     //初始化数据表格代码
     $('#dgItems').datagrid({
+        //是否容许多列排序，默认是false
+        multiSort:true,
         //添加工具栏
         toolbar: itemListToolbar,
         //初始化页面数据条数
@@ -94,10 +154,10 @@
         //列属性
         columns: [[
             {field: 'ck', checkbox: true},
-            {field: 'id', title: '编号', width: 100},
-            {field: 'title', title: '标题', width: 100},
-            {field: 'sellPoint', title: '卖点', width: 100, align: 'right'},
-            {field: 'catName', title: '商品类别名称', width: 100},
+            {field: 'id', title: '编号', width: 100 , sortable:true},
+            {field: 'title', title: '标题', width: 200,sortable:true},
+            {field: 'sellPoint', title: '卖点', width: 200, align: 'right'},
+            {field: 'catName', title: '商品类别', width: 100},
             {
                 field: 'status', title: '商品状态', width: 100, formatter: function (value, row, index) {
 //                console.group("商品状态");
@@ -121,14 +181,15 @@
                 }
             }
             },
-            {field: 'created', title: '创建时间',formatter:function (value,rows,index) {
+            {field: 'created', title: '创建时间',width:100, formatter:function (value,rows,index) {
                 return moment(value).format('L');
             }},
-            {field: 'updated', title: '更新时间',formatter:function (value,rows,index) {
-                return value;
+            {field: 'updated', title: '更新时间',width:100, formatter:function (value,rows,index) {
+                return moment(value).format('L');
             }},
-            {field: 'price', title: '商品价格', formatter:function (value) {
-                return value/100;
+            {field: 'price', title: '商品价格', width:100, formatter:function (value) {
+                var priceView = value/100;
+                return accounting.formatMoney(priceView,"￥");
             }}
         ]]
     });

@@ -1,5 +1,6 @@
 package com.xsg.ttshop.service;
 
+import com.xsg.ttshop.common.dto.Order;
 import com.xsg.ttshop.common.dto.Page;
 import com.xsg.ttshop.common.dto.Result;
 import com.xsg.ttshop.pojo.po.TbItem;
@@ -31,12 +32,12 @@ public interface ItemService {
      * 带分页的查询所有商品
      * @return
      */
-    Result<TbItemCustom> listItems(Page page);
+    Result<TbItemCustom> listItems(Page page, Order order);
 
     /**
      * 批量修改商品的状态
      * @param ids
      * @return
      */
-    int itemsBatch(List<Long> ids);
+    int itemsBatch(List<Long> ids,byte code);
 }

@@ -1,7 +1,9 @@
 package com.xsg.ttshop.dao;
 
+import com.xsg.ttshop.common.dto.Order;
 import com.xsg.ttshop.common.dto.Page;
 import com.xsg.ttshop.pojo.vo.TbItemCustom;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -23,5 +25,5 @@ public interface TbItemCustomMapper {
      * @param page
      * @return
      */
-    List<TbItemCustom> listItems(Page page);
+    List<TbItemCustom> listItems(@Param("page") Page page, @Param("order") Order order);
 }
