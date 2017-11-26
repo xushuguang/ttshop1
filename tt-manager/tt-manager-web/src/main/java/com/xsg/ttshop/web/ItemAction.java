@@ -5,6 +5,7 @@ import com.xsg.ttshop.common.dto.Page;
 import com.xsg.ttshop.common.dto.Result;
 import com.xsg.ttshop.pojo.po.TbItem;
 import com.xsg.ttshop.pojo.vo.TbItemCustom;
+import com.xsg.ttshop.pojo.vo.TbItemQuery;
 import com.xsg.ttshop.service.ItemService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,10 +50,10 @@ public class ItemAction {
 //    }
     @ResponseBody
     @RequestMapping(value = "/items", method = RequestMethod.GET)
-    public Result<TbItemCustom> listItems(Page page, Order order) {
+    public Result<TbItemCustom> listItems(Page page, Order order, TbItemQuery query) {
         Result<TbItemCustom> result = null;
         try {
-            result = itemService.listItems(page,order);
+            result = itemService.listItems(page,order,query);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             e.printStackTrace();
@@ -66,6 +67,18 @@ public class ItemAction {
         int i = 0;
         try {
             i = itemService.itemsBatch(ids,code);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            e.printStackTrace();
+        }
+        return i;
+    }
+    @ResponseBody
+    @RequestMapping(value = "/item",method = RequestMethod.POST)
+    public int saveItem(TbItem tbItem,String content) {
+        int i = 0;
+        try {
+            i = itemService.saveItem(tbItem,content);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             e.printStackTrace();

@@ -5,6 +5,7 @@ import com.xsg.ttshop.common.dto.Page;
 import com.xsg.ttshop.common.dto.Result;
 import com.xsg.ttshop.pojo.po.TbItem;
 import com.xsg.ttshop.pojo.vo.TbItemCustom;
+import com.xsg.ttshop.pojo.vo.TbItemQuery;
 
 import java.util.List;
 
@@ -32,7 +33,7 @@ public interface ItemService {
      * 带分页的查询所有商品
      * @return
      */
-    Result<TbItemCustom> listItems(Page page, Order order);
+    Result<TbItemCustom> listItems(Page page, Order order, TbItemQuery query);
 
     /**
      * 批量修改商品的状态
@@ -40,4 +41,6 @@ public interface ItemService {
      * @return
      */
     int itemsBatch(List<Long> ids,byte code);
+
+    int saveItem(TbItem tbItem, String content);
 }

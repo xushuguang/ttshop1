@@ -58,6 +58,7 @@
                 <configuration>
                     <port>8080</port>
                     <path>/ttshop1</path>
+                    <uriEncoding>UTF-8</uriEncoding>
                 </configuration>
             </plugin>
         </plugins>

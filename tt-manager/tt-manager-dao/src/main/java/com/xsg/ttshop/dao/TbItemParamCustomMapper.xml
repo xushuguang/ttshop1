@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xsg.ttshop.dao.TbItemParamCustomMapper" >
+  <sql id="Base_Column_List" >
+    i.id, i.param_data as paramData,
+   i.created, i.updated,c.name as itemCatName
+  </sql>
+  <select id="countItemParams" resultType="_long">
+    SELECT count(1) FROM tb_item_param;
+  </select>
+  <select id="listItemParams"  resultType="com.xsg.ttshop.pojo.vo.TbItemParamCustom">
+    select
+    <include refid="Base_Column_List" />
+    from tb_item_param i
+    left join tb_item_cat c on i.item_cat_id=c.id
+    <choose>
+      <when test="order!=null and order.sort!=null and order.order!=null">
+        <foreach collection="order.orderParams" item="item" open="order by" close="" separator=",">
+          i.${item}
+        </foreach>
+      </when>
+      <otherwise>
+        ORDER BY i.id DESC
+      </otherwise>
+    </choose>
+    limit #{page.offset},#{page.rows}
+  </select>
+</mapper>

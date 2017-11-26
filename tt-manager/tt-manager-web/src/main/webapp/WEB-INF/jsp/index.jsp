@@ -24,7 +24,8 @@
             <ul class="easyui-tree">
                 <li data-options="attributes:{'href':'item-add'}">新增商品</li>
                 <li data-options="attributes:{'href':'item-list'}">查询商品</li>
-                <li data-options="attributes:{'href':'item-param-list'}">规格参数</li>
+                <li data-options="attributes:{'href':'item-param-add'}">新增规格参数</li>
+                <li data-options="attributes:{'href':'item-param-list'}">查询规格参数</li>
             </ul>
         </div>
         <div title="网站内容管理" data-options="iconCls:'icon-tip'" style="padding:10px 0;">
@@ -52,34 +53,38 @@
 <script src="js/jquery-easyui-1.5/locale/easyui-lang-zh_CN.js"></script>
 <script src="js/moment/moment-with-locales.js"></script>
 <script src="js/accounting.js"></script>
+<script src="js/common.js"></script>
+<script src="js/ueditor/ueditor.config.js"></script>
+<script src="js/ueditor/ueditor.all.js"></script>
+<script>
+    ttshop.registerMenuEvent();
+</script>
 <script>
     moment.locale();
 </script>
-
 <script>
 
-    $(function () {
-        //约定大于配置：定义DOM对象的时候，一般定义为tree
-        //定义的是一个jquery对象的话，一般定义为$tree
-        var $tree = $('#menu .easyui-tree');
-        $tree.tree({
-
-            onClick: function (node) {
-                if ($('#tab').tabs('exists', node.text)) {
-                    //能进入这里说明该选项卡存在
-                    $('#tab').tabs('select', node.text);
-                } else {
-                    //新增选项卡
-                    $('#tab').tabs('add', {
-                        title: node.text,
-                        href: node.attributes.href,
-                        closable: true
-                    });
-                }
-            }
-        });
-    });
-
+//    $(function () {
+//        //约定大于配置：定义DOM对象的时候，一般定义为tree
+//        //定义的是一个jquery对象的话，一般定义为$tree
+//        var $tree = $('#menu .easyui-tree');
+//        $tree.tree({
+//
+//            onClick: function (node) {
+//                if ($('#tab').tabs('exists', node.text)) {
+//                    //能进入这里说明该选项卡存在
+//                    $('#tab').tabs('select', node.text);
+//                } else {
+//                    //新增选项卡
+//                    $('#tab').tabs('add', {
+//                        title: node.text,
+//                        href: node.attributes.href,
+//                        closable: true
+//                    });
+//                }
+//            }
+//        });
+//    });
 </script>
 
 </body>

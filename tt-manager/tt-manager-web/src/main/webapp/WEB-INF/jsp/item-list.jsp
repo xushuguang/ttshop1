@@ -1,144 +1,278 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <%--容器放好--%>
+<div id="itemListToolbar">
+    <div style="padding: 5px; background-color: #fff;">
+        <label>商品标题:</label>
+        <input class="easyui-textbox" type="text" id="title">
+        <label>商品状态:</label>
+        <select id="status" class="easyui-combobox">
+            <option value="0">全部</option>
+            <option value="1">正常</option>
+            <option value="2">下架</option>
+        </select>
+        <!--http://www.cnblogs.com/wisdomoon/p/3330856.html-->
+        <!--注意：要加上type="button",默认行为是submit-->
+        <button onclick="searchForm()" type="button" class="easyui-linkbutton">搜索</button>
+    </div>
+    <div>
+        <button onclick="itemAdd()" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">新增</button>
+        <button onclick="itemEdit()" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true">编辑</button>
+        <button onclick="itemRemove()" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true">删除</button>
+        <button onclick="itemDown()" class="easyui-linkbutton" data-options="iconCls:'icon-down',plain:true">下架</button>
+        <button onclick="itemUp()" class="easyui-linkbutton" data-options="iconCls:'icon-up',plain:true">上架</button>
+    </div>
+</div>
 <table id="dgItems"></table>
 <%--通过js代码来渲染容器--%>
 <script>
-    //自定义工具栏
-    var itemListToolbar = [{
-        iconCls: 'icon-add',
-        text: '新增',
-        handler: function () {
-            console.log('add');
+    function itemAdd() {
+        ttshop.addTab('新增商品','item-add');
+    }
+    function itemEdit() {
+        console.log('edit');
+    }
+    function itemRemove() {
+        //取到客户选中的记录集合
+        var rows = $('#dgItems').datagrid('getSelections');
+        if (rows.length == 0) {
+            $.messager.alert('警告', '请选中至少一条记录！', 'warning');
+            return;
         }
-    }, {
-        iconCls: 'icon-remove',
-        text: '删除',
-        handler: function () {
-            //debugger; //尤其可以使用这种嵌套的页面
-            //取到客户选中的记录集合
-            var rows = $('#dgItems').datagrid('getSelections');
-//            console.log(rows);
-            if (rows.length == 0) {
-                $.messager.alert('警告', '请选中至少一条记录！', 'warning');
-                return;
-            }
-            $.messager.confirm('确认', '您确定要删除记录吗？', function (r) {
-                if (r) {
-                    //客户已经点击“确定”按钮
-                    //定义一个空的数组，用来存放ID的集合
-                    var ids = [];
-                    //遍历的是客户选中的记录集合
-                    for (var i = 0; i < rows.length; i++) {
-                        ids.push(rows[i].id);
-                    }
-                    //发出ajax请求
-                    //$.ajax() $.post() $.get()
-                    $.post(
-                        //url，提交给后台谁去处理
-                        'items/batch/3',
-                        //data，提交什么到后台，ids
-                        {'ids[]':ids},
-                        //callback,相当于$.ajax中success
-                        function (data) {
-//                            //string转为object
-//                            var obj = JSON.parse(data);
-//                            //object转换string
-//                            var objString = JSON.stringify(obj);
-//                            console.log(typeof objString);
-//                            alert(obj.id);
-//                            debugger;
-                            if(data > 0){
-                                $('#dgItems').datagrid('reload');
-                            }
-                        }
-                    );
+        $.messager.confirm('确认', '您确定要删除记录吗？', function (r) {
+            if (r) {
+                //客户已经点击“确定”按钮
+                //定义一个空的数组，用来存放ID的集合
+                var ids = [];
+                //遍历的是客户选中的记录集合
+                for (var i = 0; i < rows.length; i++) {
+                    ids.push(rows[i].id);
                 }
+                //发出ajax请求
+                $.post(
+                    //url，提交给后台谁去处理
+                    'items/batch/3',
+                    //data，提交什么到后台，ids
+                    {'ids[]':ids},
+                    //callback,相当于$.ajax中success
+                    function (data) {
+                        if(data > 0){
+                            $('#dgItems').datagrid('reload');
+                        }
+                    }
+                );
+            }
 
-            });
+        });
+    }
+    function itemUp() {
+        //取到客户选中的记录集合
+        var rows = $('#dgItems').datagrid('getSelections');
+        if(rows.length == 0){
+            $.messager.alert('警告','请选中至少一条记录!','warning');
+            return;
         }
-    }, {
-        iconCls: 'icon-edit',
-        text: '编辑',
-        handler: function () {
-            console.log('edit');
-        }
-    }, {
-        iconCls: 'icon-up',
-        text: '上架',
-        handler: function () {
-//            debugger;
-           //取到客户选中的记录集合
-            var rows = $('#dgItems').datagrid('getSelections');
-            if(rows.length == 0){
-                $.messager.alert('警告','请选中至少一条记录!','warning');
-                return;
-            }
-            $.messager.confirm('确认','您确定要上架么？',function (r) {
-                if (r){
-                    //定义一个空的数组用来存放id的集合
-                    var ids = [];
-                    //遍历的是客户选中的记录集合
-                    for (var i = 0; i<rows.length; i++){
-                        ids.push(rows[i].id);
-                    }
-                    //发出ajax请求
-                    $.post(
-                        //url,提交给后台谁去处理
-                        'items/batch/1',
-                        //data,提交什么到后台，ids
-                        {'ids[]':ids},
-                        //callback,相当于$.ajax中的success
-                        function (data) {
-                            if (data > 0){
-                                $('#dgItems').datagrid('reload');
-                            }
-                        }
-                    );
+        $.messager.confirm('确认','您确定要上架么？',function (r) {
+            if (r){
+                //定义一个空的数组用来存放id的集合
+                var ids = [];
+                //遍历的是客户选中的记录集合
+                for (var i = 0; i<rows.length; i++){
+                    ids.push(rows[i].id);
                 }
-            });
-        }
-    }, {
-        iconCls: 'icon-down',
-        text: '下架',
-        handler: function () {
-            //取到客户选中的记录集合
-            var rows = $('#dgItems').datagrid('getSelections');
-            if(rows.length == 0){
-                $.messager.alert('警告','请选中至少一条记录!','warning');
-                return;
-            }
-            $.messager.confirm('确认','您确定要下架么？',function (r) {
-                if (r){
-                    //定义一个空的数组用来存放id的集合
-                    var ids = [];
-                    //遍历的是客户选中的记录集合
-                    for (var i = 0; i<rows.length; i++){
-                        ids.push(rows[i].id);
-                    }
-                    //发出ajax请求
-                    $.post(
-                        //url,提交给后台谁去处理
-                        'items/batch/2',
-                        //data,提交什么到后台，ids
-                        {'ids[]':ids},
-                        //callback,相当于$.ajax中的success
-                        function (data) {
-                            if (data > 0){
-                                $('#dgItems').datagrid('reload');
-                            }
+                //发出ajax请求
+                $.post(
+                    //url,提交给后台谁去处理
+                    'items/batch/1',
+                    //data,提交什么到后台，ids
+                    {'ids[]':ids},
+                    //callback,相当于$.ajax中的success
+                    function (data) {
+                        if (data > 0){
+                            $('#dgItems').datagrid('reload');
                         }
-                    );
-                }
-            });
+                    }
+                );
+            }
+        });
+    }
+    function itemDown() {
+        //取到客户选中的记录集合
+        var rows = $('#dgItems').datagrid('getSelections');
+        if(rows.length == 0){
+            $.messager.alert('警告','请选中至少一条记录!','warning');
+            return;
         }
-    }];
+        $.messager.confirm('确认','您确定要下架么？',function (r) {
+            if (r){
+                //定义一个空的数组用来存放id的集合
+                var ids = [];
+                //遍历的是客户选中的记录集合
+                for (var i = 0; i<rows.length; i++){
+                    ids.push(rows[i].id);
+                }
+                //发出ajax请求
+                $.post(
+                    //url,提交给后台谁去处理
+                    'items/batch/2',
+                    //data,提交什么到后台，ids
+                    {'ids[]':ids},
+                    //callback,相当于$.ajax中的success
+                    function (data) {
+                        if (data > 0){
+                            $('#dgItems').datagrid('reload');
+                        }
+                    }
+                );
+            }
+        });
+    }
+    function searchForm(){
+        $('#dgItems').datagrid('load',{
+            title: $('#title').val(),
+            status: $('#status').combobox('getValue')
+        });
+
+    }
+//    //自定义工具栏
+//    var itemListToolbar = [{
+//        iconCls: 'icon-add',
+//        text: '新增',
+//        handler: function () {
+//            console.log('add');
+//        }
+//    }, {
+//        iconCls: 'icon-remove',
+//        text: '删除',
+//        handler: function () {
+//            //debugger; //尤其可以使用这种嵌套的页面
+//            //取到客户选中的记录集合
+//            var rows = $('#dgItems').datagrid('getSelections');
+////            console.log(rows);
+//            if (rows.length == 0) {
+//                $.messager.alert('警告', '请选中至少一条记录！', 'warning');
+//                return;
+//            }
+//            $.messager.confirm('确认', '您确定要删除记录吗？', function (r) {
+//                if (r) {
+//                    //客户已经点击“确定”按钮
+//                    //定义一个空的数组，用来存放ID的集合
+//                    var ids = [];
+//                    //遍历的是客户选中的记录集合
+//                    for (var i = 0; i < rows.length; i++) {
+//                        ids.push(rows[i].id);
+//                    }
+//                    //发出ajax请求
+//                    //$.ajax() $.post() $.get()
+//                    $.post(
+//                        //url，提交给后台谁去处理
+//                        'items/batch/3',
+//                        //data，提交什么到后台，ids
+//                        {'ids[]':ids},
+//                        //callback,相当于$.ajax中success
+//                        function (data) {
+////                            //string转为object
+////                            var obj = JSON.parse(data);
+////                            //object转换string
+////                            var objString = JSON.stringify(obj);
+////                            console.log(typeof objString);
+////                            alert(obj.id);
+////                            debugger;
+//                            if(data > 0){
+//                                $('#dgItems').datagrid('reload');
+//                            }
+//                        }
+//                    );
+//                }
+//
+//            });
+//        }
+//    }, {
+//        iconCls: 'icon-edit',
+//        text: '编辑',
+//        handler: function () {
+//            console.log('edit');
+//        }
+//    }, {
+//        iconCls: 'icon-up',
+//        text: '上架',
+//        handler: function () {
+////            debugger;
+//           //取到客户选中的记录集合
+//            var rows = $('#dgItems').datagrid('getSelections');
+//            if(rows.length == 0){
+//                $.messager.alert('警告','请选中至少一条记录!','warning');
+//                return;
+//            }
+//            $.messager.confirm('确认','您确定要上架么？',function (r) {
+//                if (r){
+//                    //定义一个空的数组用来存放id的集合
+//                    var ids = [];
+//                    //遍历的是客户选中的记录集合
+//                    for (var i = 0; i<rows.length; i++){
+//                        ids.push(rows[i].id);
+//                    }
+//                    //发出ajax请求
+//                    $.post(
+//                        //url,提交给后台谁去处理
+//                        'items/batch/1',
+//                        //data,提交什么到后台，ids
+//                        {'ids[]':ids},
+//                        //callback,相当于$.ajax中的success
+//                        function (data) {
+//                            if (data > 0){
+//                                $('#dgItems').datagrid('reload');
+//                            }
+//                        }
+//                    );
+//                }
+//            });
+//        }
+//    }, {
+//        iconCls: 'icon-down',
+//        text: '下架',
+//        handler: function () {
+//            //取到客户选中的记录集合
+//            var rows = $('#dgItems').datagrid('getSelections');
+//            if(rows.length == 0){
+//                $.messager.alert('警告','请选中至少一条记录!','warning');
+//                return;
+//            }
+//            $.messager.confirm('确认','您确定要下架么？',function (r) {
+//                if (r){
+//                    //定义一个空的数组用来存放id的集合
+//                    var ids = [];
+//                    //遍历的是客户选中的记录集合
+//                    for (var i = 0; i<rows.length; i++){
+//                        ids.push(rows[i].id);
+//                    }
+//                    //发出ajax请求
+//                    $.post(
+//                        //url,提交给后台谁去处理
+//                        'items/batch/2',
+//                        //data,提交什么到后台，ids
+//                        {'ids[]':ids},
+//                        //callback,相当于$.ajax中的success
+//                        function (data) {
+//                            if (data > 0){
+//                                $('#dgItems').datagrid('reload');
+//                            }
+//                        }
+//                    );
+//                }
+//            });
+//        }
+//    }];
     //初始化数据表格代码
     $('#dgItems').datagrid({
+        //数据表格的标题
+        title: '查询商品列表',
+        //显示行号
+        rownumbers: true,
         //是否容许多列排序，默认是false
         multiSort:true,
         //添加工具栏
-        toolbar: itemListToolbar,
+        toolbar: '#itemListToolbar',
         //初始化页面数据条数
         pageSize: 20,
         //在设置分页属性的时候 初始化页面大小选择列表
