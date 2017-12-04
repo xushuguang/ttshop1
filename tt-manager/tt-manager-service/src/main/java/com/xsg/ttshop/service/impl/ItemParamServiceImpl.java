@@ -76,11 +76,28 @@ public class ItemParamServiceImpl implements ItemParamService{
             TbItemParamExample paramExample = new TbItemParamExample();
             TbItemParamExample.Criteria criteria = paramExample.createCriteria();
             criteria.andIdIn(ids);
-            itemParamDao.deleteByExample(paramExample);
+            result = itemParamDao.deleteByExample(paramExample);
         }catch (Exception e){
             logger.error(e.getMessage(),e);
             e.printStackTrace();
         }
         return result;
+    }
+
+    @Override
+    public TbItemParam getByCid(Long cid) {
+        TbItemParam itemParam = null;
+        try {
+            TbItemParamExample example = new TbItemParamExample();
+            TbItemParamExample.Criteria criteria = example.createCriteria();
+            criteria.andItemCatIdEqualTo(cid);
+            List<TbItemParam> list = itemParamDao.selectByExampleWithBLOBs(example);
+            if (list != null && list.size()>0){
+                itemParam = list.get(0);
+            }
+        }catch (Exception e){
+            logger.error(e.getMessage(),e);
+        }
+        return itemParam;
     }
 }

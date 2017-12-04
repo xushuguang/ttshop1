@@ -3,6 +3,7 @@ package com.xsg.ttshop.web;
 import com.xsg.ttshop.common.dto.Order;
 import com.xsg.ttshop.common.dto.Page;
 import com.xsg.ttshop.common.dto.Result;
+import com.xsg.ttshop.pojo.po.TbItemParam;
 import com.xsg.ttshop.pojo.vo.TbItemParamCustom;
 import com.xsg.ttshop.service.ItemParamService;
 import org.slf4j.Logger;
@@ -51,14 +52,25 @@ public class ItemParamAction {
     @ResponseBody
     @RequestMapping(value = "/itemParam/delete", method= RequestMethod.POST)
     public int delItemParamsBatch(@RequestParam("ids[]") List<Long> ids){
-        int i = 0;
+        int result = 0;
         try {
-            i = itemParamService.delItemParamsBatch(ids);
+            result = itemParamService.delItemParamsBatch(ids);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             e.printStackTrace();
         }
-        return i;
+        return result;
+    }
+    @ResponseBody
+    @RequestMapping(value = "/itemParam/{cid}",method = RequestMethod.GET)
+    public TbItemParam getByCid(@PathVariable("cid") Long cid){
+        TbItemParam itemParam = null;
+       try {
+           itemParam = itemParamService.getByCid(cid);
+       }catch (Exception e){
+           logger.error(e.getMessage(),e);
+       }
+        return itemParam;
     }
 
 }

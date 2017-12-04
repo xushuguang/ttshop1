@@ -63,6 +63,16 @@
     moment.locale();
 </script>
 <script>
+    UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
+    UE.Editor.prototype.getActionUrl = function(action) {
+        if (action == 'uploadimage') {
+            return 'http://localhost:8080/ttshop1/file/upload';
+        }else {
+            return this._bkGetActionUrl.call(this, action);
+        }
+    }
+</script>
+<script>
 
 //    $(function () {
 //        //约定大于配置：定义DOM对象的时候，一般定义为tree
@@ -86,6 +96,5 @@
 //        });
 //    });
 </script>
-
 </body>
 </html>

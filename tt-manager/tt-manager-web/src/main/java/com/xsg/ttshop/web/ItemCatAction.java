@@ -25,7 +25,7 @@ public class ItemCatAction {
     private ItemCatService itemCatService;
 
    @ResponseBody
-    @RequestMapping(value = "/itemCats/{parentId}",method = RequestMethod.POST)
+    @RequestMapping(value = "/itemCats/{parentId}",method = RequestMethod.GET)
     public List<TreeNode> listItemCats(@PathVariable("parentId") Long parentId){
        List<TreeNode> list = null;
        try {

@@ -9,6 +9,8 @@
     <file url="file://$PROJECT_DIR$/tt-manager/tt-manager-service" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tt-manager/tt-manager-web" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tt-parent" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tt-portal-web" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tt-upload" charset="UTF-8" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

@@ -84,7 +84,8 @@
                     //data，提交什么到后台，ids
                     {'ids[]':ids},
                     //callback,相当于$.ajax中success
-                    function (data) {
+                    function (data){
+                        console.log(data);
                         if(data > 0){
                             $('#dgParamList').datagrid('reload');
                         }

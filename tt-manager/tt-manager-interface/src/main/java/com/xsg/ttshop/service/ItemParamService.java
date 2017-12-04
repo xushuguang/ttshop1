@@ -3,6 +3,7 @@ package com.xsg.ttshop.service;
 import com.xsg.ttshop.common.dto.Order;
 import com.xsg.ttshop.common.dto.Page;
 import com.xsg.ttshop.common.dto.Result;
+import com.xsg.ttshop.pojo.po.TbItemParam;
 import com.xsg.ttshop.pojo.vo.TbItemParamCustom;
 
 import java.util.List;
@@ -19,4 +20,6 @@ public interface ItemParamService {
     int saveItemParam(long cid, String paramData);
 
     int delItemParamsBatch(List<Long> ids);
+
+    TbItemParam getByCid(Long cid);
 }

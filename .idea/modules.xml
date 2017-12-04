@@ -10,6 +10,8 @@
       <module fileurl="file://$PROJECT_DIR$/tt-manager/tt-manager-service/tt-manager-service.iml" filepath="$PROJECT_DIR$/tt-manager/tt-manager-service/tt-manager-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/tt-manager/tt-manager-web/tt-manager-web.iml" filepath="$PROJECT_DIR$/tt-manager/tt-manager-web/tt-manager-web.iml" />
       <module fileurl="file://$PROJECT_DIR$/tt-parent/tt-parent.iml" filepath="$PROJECT_DIR$/tt-parent/tt-parent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tt-portal-web/tt-portal-web.iml" filepath="$PROJECT_DIR$/tt-portal-web/tt-portal-web.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tt-upload/tt-upload.iml" filepath="$PROJECT_DIR$/tt-upload/tt-upload.iml" />
     </modules>
   </component>
 </project>

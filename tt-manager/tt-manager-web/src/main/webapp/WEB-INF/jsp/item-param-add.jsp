@@ -3,7 +3,7 @@
 <div class="easyui-panel" title="商品规格参数模板详情" data-options="fit:true"  style="width:100%;max-width:600px;padding:10px 20px;">
     <form class="form" id="itemParamAddForm" name="itemParamAddForm" method="post">
         <div style="margin-bottom:20px">
-            <input class="easyui-textbox" id="cid" name="cid" style="width:60%" data-options="label:'商品类目:',required:true">
+            <input class="easyui-textbox" id="cpid" name="cid" style="width:60%" data-options="label:'商品类目:',required:true">
         </div>
         <div style="margin-bottom:20px">
             规格参数:
@@ -39,13 +39,13 @@
 </div>
 <script>
     //初始化类别选择树
-    $('#cid').combotree({
+    $('#cpid').combotree({
         url: 'itemCats/0',
         required: true,
         //在节点展开之前触发，返回false可以取消展开操作。
         onBeforeExpand: function (node) {
             //获取当前被点击的tree
-            var $currentTree = $('#cid').combotree('tree');
+            var $currentTree = $('#cpid').combotree('tree');
             //调用easyui tree 组件的options方法
             var option = $currentTree.tree('options');
             //修改option的url属性
@@ -53,7 +53,7 @@
         },
         //在用户选择一个节点之前触发，返回false可以取消选择动作。
         onBeforeSelect: function (node) {
-            var isLeaf = $('#cid').tree('isLeaf',node.target);
+            var isLeaf = $('#cpid').tree('isLeaf',node.target);
             if (!isLeaf){
                 $.messager.alert('警告','请选择最终类目','warning');
                 return false;
@@ -100,7 +100,7 @@
             }
         });
         //得到规格参数模板的json串
-        var cid = $('#cid').combotree('getValue');
+        var cid = $('#cpid').combotree('getValue');
         var url = 'itemParam/save/'+cid;
         var  jsonStr = JSON.stringify(groupValues);
         $.post(url,{paramData:jsonStr},function (data) {
