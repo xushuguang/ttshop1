@@ -1,4 +1,4 @@
-package com.xsg.ttshop.commom.jedis;
+package com.xsg.ttshop.common.jedis;
 
 import redis.clients.jedis.JedisCluster;
 
